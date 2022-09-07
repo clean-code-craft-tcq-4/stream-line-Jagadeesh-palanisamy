@@ -1,8 +1,8 @@
-function randomValueGenerator(min_threshold = 0, max_threshold = 50, range = 50) {
+function randomValueGenerator(minThreshold = 0, maxThreshold = 50, range = 50) {
     let randomlist = []
     for (let i = 0; i < range; i++) {
-        lowLimit = Number(min_threshold);
-        highLimit = Number(max_threshold);
+        let lowLimit = Number(minThreshold);
+        let highLimit = Number(maxThreshold);
         let randomNum = Math.floor(Math.random() * (highLimit - lowLimit) + lowLimit);
         randomlist.push(randomNum)
     }
@@ -10,12 +10,12 @@ function randomValueGenerator(min_threshold = 0, max_threshold = 50, range = 50)
     return randomlist
 }
 
-function temperatureSensor(min_threshold = 0, max_threshold = 50, range = 50) {
-    randomValueGenerator(min_threshold, max_threshold, range);
+function temperatureSensor(minThreshold = 0, maxThreshold = 50, range = 50) {
+    randomValueGenerator(minThreshold, maxThreshold, range);
 }
 
-function socSensor(min_threshold = 0, max_threshold = 50, range = 50) {
-    randomValueGenerator(min_threshold, max_threshold, range);
+function socSensor(minThreshold = 0, maxThreshold = 50, range = 50) {
+    randomValueGenerator(minThreshold, maxThreshold, range);
 }
 
 function sensorStatistics(temMin, tempMax, socMin, socMax, tempRange, socRange) {
