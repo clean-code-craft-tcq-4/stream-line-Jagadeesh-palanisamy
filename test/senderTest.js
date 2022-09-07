@@ -34,7 +34,7 @@ describe('socSensor', () => {
     });
     it('should return soc Sensor exect value count', () => {
         let list = sender.socSensor(0, 30, 20);
-        expect(list.length).to.deep.equals(10);
+        expect(list.length).to.deep.equals(20);
     });
     it('should return soc Sensor random value between the min and max value given', () => {
         let list = sender.socSensor(10, 70, 10);
