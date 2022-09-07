@@ -23,7 +23,7 @@ describe('randomValueGenerator', () => {
         let list=sender.temperatureSensor(0,50,10);
         let minValue = Math.min(...list);
         let maxValue = Math.max(...list);
-        expect(minValue).toBeGreaterThan(0)
-        expect(maxValue).toBeLessThan(50)
+        expect(minValue).to.be.above(0)
+        expect(maxValue).to.be.below(50)
     });
   });
