@@ -1,5 +1,5 @@
 const {expect} = require('chai');
-const sender = require('./sender');
+const sender = require('../sender');
 
 
 
