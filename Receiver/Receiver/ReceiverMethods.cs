@@ -17,17 +17,18 @@ namespace Receiver
                 {
                     if (!string.IsNullOrEmpty(line))
                     {
-                        if(!line.Contains('[') || !line.Contains(']'))
-                        {
-                            inputLine = inputLine + line;
-                        }
-                        else
+                        if(line.Contains('[') || line.Contains(']'))
                         {
                             inputData.Add(inputLine);
                             inputLine = string.Empty;
                         }
+                        else
+                        {
+                            inputLine = inputLine + line;
+                        }
                     }
                 }
+                Console.WriteLine("InputData Count: " + inputData.Count);
                 inputData = inputData.Where(t => !string.IsNullOrWhiteSpace(t)).Distinct().ToList();
                 return GetInputfromSender(inputData);
             }
