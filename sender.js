@@ -27,7 +27,7 @@ function printStatement(statement) {
     console.log(statement);
 }
 
-// sensorStatistics(0,10,0,10,5,5);
+sensorStatistics(0,10,0,10,50,50);
 
 module.exports = {
     randomValueGenerator,
