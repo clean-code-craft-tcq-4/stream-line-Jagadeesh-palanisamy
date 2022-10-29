@@ -20,6 +20,7 @@ namespace Receiver
                     inputData.Add(line);
                     Console.WriteLine(line);
                 }
+                line = string.Empty;
             }
             return GetInputfromSender(inputData);
         }
