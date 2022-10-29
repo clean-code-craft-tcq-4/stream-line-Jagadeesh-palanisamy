@@ -10,18 +10,25 @@ namespace Receiver
         {
             try
             {
-                string line = string.Empty; ;
-                Console.WriteLine("InputData");
+                string line = string.Empty;
                 List<string> inputData = new List<string>();
+                string inputLine = string.Empty;
                 while ((line = Console.ReadLine()) != null)
                 {
                     if (!string.IsNullOrEmpty(line))
                     {
-                        inputData.Add(line);
-                        Console.WriteLine(line);
+                        if(!line.Contains('[') || !line.Contains(']'))
+                        {
+                            inputLine = inputLine + line;
+                        }
+                        else
+                        {
+                            inputData.Add(inputLine);
+                            inputLine = string.Empty;
+                            break;
+                        }
                     }
                 }
-                Console.WriteLine("InputData Count: " + inputData.Count);
                 return GetInputfromSender(inputData);
             }
             catch (Exception ex)
@@ -36,10 +43,12 @@ namespace Receiver
             try
             {
                 List<ReceiverDataModel> receiverDataList = new List<ReceiverDataModel>();
+                Console.WriteLine("InputData");
 
                 int lineCount = 1;
                 foreach (string data in inputData)
                 {
+                    Console.WriteLine(data);
                     List<float> sensorData = new List<float>();
                     var receiverData = new ReceiverDataModel();
                     if (!string.IsNullOrEmpty(data))
