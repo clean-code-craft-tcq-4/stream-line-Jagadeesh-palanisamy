@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sender = require('../sender');
 
 describe('randomValueGenerator', () => {
-    let list = sender.randomValueGenerator(0, 10, 5);
+    let list = sender.randomValueGenerator(1, 10, 5);
     it('should exists', () => {
         expect(sender.randomValueGenerator).to.exist;
     });
