@@ -7,133 +7,103 @@ namespace Receiver
     public class ReceiverMethods
     {
         public List<StatisticsModel> GetStatisticsData()
-        {
-            try
+        {           
+            string line = string.Empty;
+            List<string> inputData = new List<string>();
+            string inputLine = string.Empty;
+            while ((line = Console.ReadLine()) != null)
             {
-                string line = string.Empty;
-                List<string> inputData = new List<string>();
-                string inputLine = string.Empty;
-                while ((line = Console.ReadLine()) != null)
+                if (!string.IsNullOrEmpty(line))
                 {
-                    if (!string.IsNullOrEmpty(line))
+                    if(line.Contains('[') || line.Contains(']'))
                     {
-                        if(line.Contains('[') || line.Contains(']'))
-                        {
-                            inputData.Add(inputLine);
-                            inputLine = string.Empty;
-                        }
-                        else
-                        {
-                            inputLine = inputLine + line;
-                        }
+                        inputData.Add(inputLine);
+                        inputLine = string.Empty;
+                    }
+                    else
+                    {
+                        inputLine = inputLine + line;
                     }
                 }
-                inputData = inputData.Where(t => !string.IsNullOrWhiteSpace(t)).Distinct().ToList();
-                return GetInputfromSender(inputData);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error in Getting Sender Data. " + ex.Message);
-                return null;
-            }
+            inputData = inputData.Where(t => !string.IsNullOrWhiteSpace(t)).Distinct().ToList();
+            return GetInputfromSender(inputData);
             
         }
         public List<StatisticsModel> GetInputfromSender(List<string> inputData)
         {
-            try
-            {
-                List<ReceiverDataModel> receiverDataList = new List<ReceiverDataModel>();
+            
+            List<ReceiverDataModel> receiverDataList = new List<ReceiverDataModel>();
 
-                int lineCount = 1;
-                foreach (string data in inputData)
+            int lineCount = 1;
+            foreach (string data in inputData)
+            {
+                List<float> sensorData = new List<float>();
+                var receiverData = new ReceiverDataModel();
+                if (!string.IsNullOrEmpty(data))
                 {
-                    List<float> sensorData = new List<float>();
-                    var receiverData = new ReceiverDataModel();
-                    if (!string.IsNullOrEmpty(data))
+                    string[] sensorValueList = data.Trim().Split(new char[] { ',', '[', ']' });
+
+                    foreach (string sensorValue in sensorValueList)
                     {
-                        string[] sensorValueList = data.Trim().Split(new char[] { ',', '[', ']' });
-
-                        foreach (string sensorValue in sensorValueList)
-                        {
-                            if (!string.IsNullOrEmpty(sensorValue))
-                                sensorData.Add((float)Convert.ToDouble(sensorValue));
-                        }
-                        if (lineCount == 1)
-                            receiverData.Sensor = "Temperature";
-                        else
-                            receiverData.Sensor = "SOC";
-
-                        receiverData.SensorData = sensorData;
-
-                        receiverDataList.Add(receiverData);
-                        lineCount = lineCount + 1;
+                        if (!string.IsNullOrEmpty(sensorValue))
+                            sensorData.Add((float)Convert.ToDouble(sensorValue));
                     }
+                    if (lineCount == 1)
+                        receiverData.Sensor = "Temperature";
+                    else
+                        receiverData.Sensor = "SOC";
+
+                    receiverData.SensorData = sensorData;
+
+                    receiverDataList.Add(receiverData);
+                    lineCount = lineCount + 1;
                 }
-                return CalculateStatistics(receiverDataList);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error in Processing sender data. " + ex.Message);
-                return null;
-            }
-                 
+            return CalculateStatistics(receiverDataList);                 
         }
 
         public List<StatisticsModel> CalculateStatistics(List<ReceiverDataModel> receiverDataList)
         {
-            try
-            {                
-                List<StatisticsModel> sensorStatisticsData = new List<StatisticsModel>();
+                        
+            List<StatisticsModel> sensorStatisticsData = new List<StatisticsModel>();
 
-                foreach (ReceiverDataModel receiverData in receiverDataList)
-                {
-                    StatisticsModel statisticsData = new StatisticsModel();
-                    string MovingAverage = string.Empty;
-                    float tempSMA;
-                    statisticsData.Sensor = receiverData.Sensor;
-                    statisticsData.Min = receiverData.SensorData.Min();
-                    statisticsData.Max = receiverData.SensorData.Max();
-
-                    for (int i = 0; i < (receiverData.SensorData.Count / 5); i++)
-                    {
-                        tempSMA = 0;
-                        for (int j = 0; j < 5; j++)
-                        {
-                            tempSMA = tempSMA + receiverData.SensorData[(i * 5) + j];
-                        }
-                        if (i == (receiverData.SensorData.Count / 5) - 1)
-                            MovingAverage = MovingAverage + tempSMA / 5;
-                        else
-                            MovingAverage = MovingAverage + tempSMA / 5 + ", ";
-                    }
-                    statisticsData.SMA = MovingAverage;
-
-                    sensorStatisticsData.Add(statisticsData);
-                }
-                return sensorStatisticsData;
-            }
-            catch(Exception ex)
+            foreach (ReceiverDataModel receiverData in receiverDataList)
             {
-                Console.WriteLine("Error in Calculating Statistics. " + ex.Message);
-                return null;
-            }          
+                StatisticsModel statisticsData = new StatisticsModel();
+                string MovingAverage = string.Empty;
+                float tempSMA;
+                statisticsData.Sensor = receiverData.Sensor;
+                statisticsData.Min = receiverData.SensorData.Min();
+                statisticsData.Max = receiverData.SensorData.Max();
+
+                for (int i = 0; i < (receiverData.SensorData.Count / 5); i++)
+                {
+                    tempSMA = 0;
+                    for (int j = 0; j < 5; j++)
+                    {
+                        tempSMA = tempSMA + receiverData.SensorData[(i * 5) + j];
+                    }
+                    if (i == (receiverData.SensorData.Count / 5) - 1)
+                        MovingAverage = MovingAverage + tempSMA / 5;
+                    else
+                        MovingAverage = MovingAverage + tempSMA / 5 + ", ";
+                }
+                statisticsData.SMA = MovingAverage;
+
+                sensorStatisticsData.Add(statisticsData);
+            }
+            return sensorStatisticsData;     
         }
 
         public void PrintBMSCalculation(List<StatisticsModel> sensorStatisticsData)
-        {
-            try
+        {            
+            foreach (StatisticsModel sensorStatistics in sensorStatisticsData)
             {
-                foreach (StatisticsModel sensorStatistics in sensorStatisticsData)
-                {
-                    Console.WriteLine(sensorStatistics.Sensor + " Statistics");
-                    Console.WriteLine(sensorStatistics.Sensor + " Minimum: " + sensorStatistics.Min);
-                    Console.WriteLine(sensorStatistics.Sensor + " Maximum: " + sensorStatistics.Max);
-                    Console.WriteLine(sensorStatistics.Sensor + " Simple Moving Average (With 5 Input Values): " + sensorStatistics.SMA);
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("Error in Printing Statistics. " + ex.Message);
+                Console.WriteLine(sensorStatistics.Sensor + " Statistics");
+                Console.WriteLine(sensorStatistics.Sensor + " Minimum: " + sensorStatistics.Min);
+                Console.WriteLine(sensorStatistics.Sensor + " Maximum: " + sensorStatistics.Max);
+                Console.WriteLine(sensorStatistics.Sensor + " Simple Moving Average (With 5 Input Values): " + sensorStatistics.SMA);
             }
         }
     }
