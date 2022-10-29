@@ -25,10 +25,10 @@ namespace Receiver
                         {
                             inputData.Add(inputLine);
                             inputLine = string.Empty;
-                            break;
                         }
                     }
                 }
+                inputData = inputData.Where(t => !string.IsNullOrWhiteSpace(t)).Distinct().ToList();
                 return GetInputfromSender(inputData);
             }
             catch (Exception ex)
