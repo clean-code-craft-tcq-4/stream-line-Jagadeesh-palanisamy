@@ -13,6 +13,7 @@ namespace Receiver
             string line;
             Console.WriteLine("InputData");
             List<string> inputData = new List<string>();
+            List<StatisticsModel> statData = new List<StatisticsModel>();
             while ((line = Console.ReadLine()) != null)
             {
                 if (!string.IsNullOrEmpty(line))
@@ -20,9 +21,10 @@ namespace Receiver
                     inputData.Add(line);
                     Console.WriteLine(line);
                 }
-                line = string.Empty;
             }
-            return GetInputfromSender(inputData);
+            statData = GetInputfromSender(inputData);
+
+            return statData;
         }
         public List<StatisticsModel> GetInputfromSender(List<string> inputData)
         {
