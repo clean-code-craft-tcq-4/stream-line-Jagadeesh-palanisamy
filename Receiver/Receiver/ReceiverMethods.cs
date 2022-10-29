@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Receiver
 {
@@ -21,11 +19,13 @@ namespace Receiver
                     Console.WriteLine(line);
                 }
             }
-            return GetInputfromSender(inputData);            
+            List<StatisticsModel> statsData = GetInputfromSender(inputData);
+            return statsData;
         }
         public List<StatisticsModel> GetInputfromSender(List<string> inputData)
         {
             List<ReceiverDataModel> receiverDataList = new List<ReceiverDataModel>();
+            
             int lineCount = 1;
             foreach (string data in inputData)
             {
@@ -51,8 +51,8 @@ namespace Receiver
                     lineCount = lineCount + 1;
                 }
             }
-                
-            return CalculateStatistics(receiverDataList);
+            List<StatisticsModel> statsData = CalculateStatistics(receiverDataList);
+            return statsData;
         }
 
         public List<StatisticsModel> CalculateStatistics(List<ReceiverDataModel> receiverDataList)
@@ -76,7 +76,7 @@ namespace Receiver
                         tempSMA = tempSMA + receiverData.SensorData[(i * 5) + j];
                     }
                     if(i == (receiverData.SensorData.Count / 5) - 1)
-                        MovingAverage = MovingAverage + tempSMA/5;
+                        MovingAverage = MovingAverage + tempSMA / 5;
                     else
                         MovingAverage = MovingAverage + tempSMA / 5 + ", ";
                 }
