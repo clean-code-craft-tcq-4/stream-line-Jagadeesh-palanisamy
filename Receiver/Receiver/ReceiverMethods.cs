@@ -28,7 +28,6 @@ namespace Receiver
                         }
                     }
                 }
-                Console.WriteLine("InputData Count: " + inputData.Count);
                 inputData = inputData.Where(t => !string.IsNullOrWhiteSpace(t)).Distinct().ToList();
                 return GetInputfromSender(inputData);
             }
@@ -44,12 +43,10 @@ namespace Receiver
             try
             {
                 List<ReceiverDataModel> receiverDataList = new List<ReceiverDataModel>();
-                Console.WriteLine("InputData");
 
                 int lineCount = 1;
                 foreach (string data in inputData)
                 {
-                    Console.WriteLine(data);
                     List<float> sensorData = new List<float>();
                     var receiverData = new ReceiverDataModel();
                     if (!string.IsNullOrEmpty(data))
@@ -72,7 +69,6 @@ namespace Receiver
                         lineCount = lineCount + 1;
                     }
                 }
-                Console.WriteLine("ReceiverDataList Count: " + receiverDataList.Count);
                 return CalculateStatistics(receiverDataList);
             }
             catch (Exception ex)
@@ -129,10 +125,10 @@ namespace Receiver
             {
                 foreach (StatisticsModel sensorStatistics in sensorStatisticsData)
                 {
-                    Console.WriteLine(sensorStatistics.Sensor);
-                    Console.WriteLine("Minimum: " + sensorStatistics.Min);
-                    Console.WriteLine("Maximum: " + sensorStatistics.Max);
-                    Console.WriteLine("Simple Moving Average: " + sensorStatistics.SMA);
+                    Console.WriteLine(sensorStatistics.Sensor + " Statistics");
+                    Console.WriteLine(sensorStatistics.Sensor + " Minimum: " + sensorStatistics.Min);
+                    Console.WriteLine(sensorStatistics.Sensor + " Maximum: " + sensorStatistics.Max);
+                    Console.WriteLine(sensorStatistics.Sensor + " Simple Moving Average (With 5 Input Values): " + sensorStatistics.SMA);
                 }
             }
             catch(Exception ex)
