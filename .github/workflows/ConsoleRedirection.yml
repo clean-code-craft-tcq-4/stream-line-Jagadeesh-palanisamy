@@ -1,0 +1,40 @@
+name: Console Redirection
+
+on: [push, pull_request]
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        configuration: [Debug]
+
+    runs-on: windows-latest  # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    # Install and run java App
+    - name: Set up JavaScript
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Run Sender
+      run: node .\sender.js
+      
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Build
+      run: dotnet build Receiver/Receiver --configuration Debug
+      
+    - name: Run cmd
+      shell: cmd
+      run:  node .\sender.js | D:\a\stream-line-Jagadeesh-palanisamy\stream-line-Jagadeesh-palanisamy\Receiver\Receiver\bin\Debug\netcoreapp3.1\Receiver.exe
