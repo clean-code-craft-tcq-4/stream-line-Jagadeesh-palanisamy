@@ -11,12 +11,14 @@ namespace Receiver
         public List<StatisticsModel> GetStatisticsData()
         {
             string line;
+            Console.WriteLine("InputData");
             List<string> inputData = new List<string>();
             while ((line = Console.ReadLine()) != null)
             {
                 if (!string.IsNullOrEmpty(line))
                 {
                     inputData.Add(line);
+                    Console.WriteLine(line);
                 }
             }
             return GetInputfromSender(inputData);
