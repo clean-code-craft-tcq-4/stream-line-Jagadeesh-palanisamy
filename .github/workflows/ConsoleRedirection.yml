@@ -24,8 +24,6 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '14'
-    - name: Install Dependencies
-      run: sudo npm install
     - name: Run Sender
       run: node .\sender.js
       
