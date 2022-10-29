@@ -9,7 +9,10 @@ namespace Receiver
         {
             ReceiverMethods receiverMethod = new ReceiverMethods();
             List<StatisticsModel> statisticsData = receiverMethod.GetStatisticsData();
-            receiverMethod.PrintBMSCalculation(statisticsData);
+            if (statisticsData != null)
+                receiverMethod.PrintBMSCalculation(statisticsData);
+            else
+                Console.WriteLine("Error in Sending or Receiving data");
         }
     }
 }
