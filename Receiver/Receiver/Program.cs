@@ -8,8 +8,7 @@ namespace Receiver
         static void Main(string[] args)
         {
             ReceiverMethods receiverMethod = new ReceiverMethods();
-            List<StatisticsModel> statisticsData = new List<StatisticsModel>();
-            statisticsData = receiverMethod.GetStatisticsData();
+            List<StatisticsModel> statisticsData = receiverMethod.GetStatisticsData();
             receiverMethod.PrintBMSCalculation(statisticsData);
         }
     }
