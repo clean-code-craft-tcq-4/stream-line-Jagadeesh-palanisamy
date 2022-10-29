@@ -13,7 +13,6 @@ namespace Receiver
             string line;
             Console.WriteLine("InputData");
             List<string> inputData = new List<string>();
-            List<StatisticsModel> statData = new List<StatisticsModel>();
             while ((line = Console.ReadLine()) != null)
             {
                 if (!string.IsNullOrEmpty(line))
@@ -22,9 +21,7 @@ namespace Receiver
                     Console.WriteLine(line);
                 }
             }
-            statData = GetInputfromSender(inputData);
-
-            return statData;
+            return GetInputfromSender(inputData);            
         }
         public List<StatisticsModel> GetInputfromSender(List<string> inputData)
         {
@@ -32,20 +29,23 @@ namespace Receiver
             int lineCount = 1;
             foreach (string data in inputData)
             {
+                List<float> sensorData = new List<float>();
+                var receiverData = new ReceiverDataModel();
                 if (!string.IsNullOrEmpty(data))
                 {
                     string[] sensorValueList = data.Trim().Split(new char[] { ',', '[', ']' });
-                    ReceiverDataModel receiverData = new ReceiverDataModel();
 
                     foreach (string sensorValue in sensorValueList)
                     {
                         if (!string.IsNullOrEmpty(sensorValue))
-                            receiverData.SensorData.Add((float)Convert.ToDouble(sensorValue));
+                            sensorData.Add((float)Convert.ToDouble(sensorValue));
                     }
                     if (lineCount == 1)
                         receiverData.Sensor = "Temperature";
                     else
                         receiverData.Sensor = "SOC";
+
+                    receiverData.SensorData = sensorData;
 
                     receiverDataList.Add(receiverData);
                     lineCount = lineCount + 1;
@@ -71,14 +71,14 @@ namespace Receiver
                 for (int i = 0; i < (receiverData.SensorData.Count/5); i++)
                 {
                     tempSMA = 0;
-                    for(int j = 0; j < 10; j++)
+                    for(int j = 0; j < 5; j++)
                     {
-                        tempSMA = tempSMA + receiverData.SensorData[i * j];
+                        tempSMA = tempSMA + receiverData.SensorData[(i * 5) + j];
                     }
                     if(i == (receiverData.SensorData.Count / 5) - 1)
-                        MovingAverage = MovingAverage + tempSMA/10;
+                        MovingAverage = MovingAverage + tempSMA/5;
                     else
-                        MovingAverage = MovingAverage + tempSMA / 10 + ", ";
+                        MovingAverage = MovingAverage + tempSMA / 5 + ", ";
                 }
                 statisticsData.SMA = MovingAverage;
 
