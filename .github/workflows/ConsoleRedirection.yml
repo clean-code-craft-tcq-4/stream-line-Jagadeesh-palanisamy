@@ -21,10 +21,13 @@ jobs:
 
     # Install and run java App
     - name: Set up JavaScript
-      
-	  runs:
-		using: 'node16'
-		main: 'sender.js'
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Install Dependencies
+      run: sudo npm install
+    - name: Run Sender
+      run: node .\sender.js
       
     # Install the .NET Core workload
     - name: Install .NET Core
@@ -35,5 +38,5 @@ jobs:
       run: dotnet build Receiver/Receiver --configuration Debug
       
     - name: Run cmd
-      run: D:\a\stream-line-Jagadeesh-palanisamy\stream-line-Jagadeesh-palanisamy\Receiver\Receiver\bin\Debug\netcoreapp3.1\Receiver.exe
       shell: cmd
+      run:  node .\sender.js | D:\a\stream-line-Jagadeesh-palanisamy\stream-line-Jagadeesh-palanisamy\Receiver\Receiver\bin\Debug\netcoreapp3.1\Receiver.exe
